@@ -1,5 +1,5 @@
 export default class GenericError {
-  constructor(status, mensage) {
-    (this.status = status), (this.mensage = mensage);
+  constructor(status, message) {
+    (this.status = status), (this.message = message);
   }
 }
