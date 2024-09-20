@@ -22,10 +22,25 @@ export default class CreateEventoService {
         horarioInicioEvento,
       },
     });
+    const dataAtual = new Date();
+    dataAtual.setHours(0, 0, 0, 0);
+    const dataFormatada = dataAtual.toISOString().split("T")[0];
+    const dataInicialFormatada = dataInicial.toISOString().split("T")[0];
+
+    if (dataInicialFormatada < dataFormatada) {
+      throw new GenericError(
+        404,
+        "A data inicial não pode ser menor que hoje."
+      );
+    }
 
     if (dataFinal < dataInicial) {
-      throw new GenericError("A data final deve ser maior que a data inicio.");
+      throw new GenericError(
+        404,
+        "A data final deve ser maior que a data inicio."
+      );
     }
+    console.log(evento);
 
     return evento;
   }

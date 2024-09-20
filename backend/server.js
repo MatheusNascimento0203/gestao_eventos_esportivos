@@ -7,6 +7,7 @@ import GenericError from "./src/errors/generic-error.js";
 import { fastifyJwt } from "@fastify/jwt";
 import dotenv from "dotenv";
 import eventoRouter from "./src/routers/evento-router.js";
+import equipeRouter from "./src/routers/equipe-routes.js";
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ app.register(fastifyJwt, {
 
 //TRATAMENTO DE ERROS
 app.setErrorHandler((error, req, reply) => {
-  // console.log(error);
+  console.log(error);
 
   if (error instanceof ZodError) {
     return reply.status(400).send({
@@ -43,7 +44,7 @@ app.setErrorHandler((error, req, reply) => {
 app.register(cors, { origin: "*" });
 app.register(userRouter);
 app.register(eventoRouter);
-
+app.register(equipeRouter);
 //CRIANDO O SERVIDOR
 const startServer = async () => {
   try {

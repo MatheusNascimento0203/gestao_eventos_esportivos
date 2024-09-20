@@ -37,6 +37,7 @@ model evento {
 model equipe {
   id Int @id @default(autoincrement())
   idEvento Int
+  nomeEquipe String @db.VarChar(100)
   quantidadeAtletas Int @db.SmallInt
   nomePresidente String @db.VarChar(60)
   treinador String @db.VarChar(60)
