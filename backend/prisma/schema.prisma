@@ -61,10 +61,10 @@ model atleta {
   id Int @id @default(autoincrement())
   idEquipe Int
   idPosicao Int
-  CPF BigInt @db.BigInt
+  CPF String @db.VarChar(15)
   RG String @db.VarChar(20)
   idade Int @db.SmallInt
-  contato BigInt @db.BigInt
+  contato String @db.VarChar(15)
   dataNascimento DateTime @db.Date
   observacaoJogador String @db.VarChar(500)
   equipe equipe @relation(fields: [idEquipe], references: [id])
