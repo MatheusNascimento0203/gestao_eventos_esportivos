@@ -5,6 +5,10 @@ import cors from "@fastify/cors";
 import { ZodError } from "zod";
 import GenericError from "./src/errors/generic-error.js";
 import { fastifyJwt } from "@fastify/jwt";
+import dotenv from "dotenv";
+import eventoRouter from "./src/routers/evento-router.js";
+
+dotenv.config();
 
 //INICIANDO O APP
 const app = fastify();
@@ -14,7 +18,6 @@ app.register(fastifyJwt, {
   secret: process.env.SECRET,
 });
 
-console.log("Valor da SECRET:", process.env.SECRET);
 //TRATAMENTO DE ERROS
 app.setErrorHandler((error, req, reply) => {
   // console.log(error);
@@ -39,6 +42,7 @@ app.setErrorHandler((error, req, reply) => {
 //REGISTRANDO ROTAS
 app.register(cors, { origin: "*" });
 app.register(userRouter);
+app.register(eventoRouter);
 
 //CRIANDO O SERVIDOR
 const startServer = async () => {

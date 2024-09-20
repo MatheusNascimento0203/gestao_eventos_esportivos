@@ -21,3 +21,51 @@ model usuario {
   senha String @db.VarChar(255)
   dataCadastro DateTime @default(now()) @db.Timestamptz(3)
 }
+
+model evento {
+  id Int @id @default(autoincrement())
+  nomeEvento String @db.VarChar(100)
+  local String @db.VarChar(100)
+  quantidadeEquipes Int @db.SmallInt
+  tipoEvento String @db.VarChar(30)
+  dataInicial DateTime @db.Date
+  dataFinal DateTime @db.Date
+  horarioInicioEvento DateTime @db.Time()
+  equipe equipe[]
+}
+
+model equipe {
+  id Int @id @default(autoincrement())
+  idEvento Int
+  quantidadeAtletas Int @db.SmallInt
+  nomePresidente String @db.VarChar(60)
+  treinador String @db.VarChar(60)
+  quantidadeTitulos Int @db.SmallInt
+  nomeSede String @db.VarChar(60)
+  contato BigInt @db.BigInt
+  dataFundacao DateTime @db.Date
+  observacaoEquipe String @db.VarChar(500)
+  evento evento @relation(fields: [idEvento], references: [id])
+  atleta atleta[]
+}
+
+
+model posicaoAtleta {
+  id Int @id @db.SmallInt @default(autoincrement())
+  nomePosicao String @db.VarChar(60)
+  atleta atleta[]
+}
+
+model atleta {
+  id Int @id @default(autoincrement())
+  idEquipe Int
+  idPosicao Int
+  CPF BigInt @db.BigInt
+  RG String @db.VarChar(20)
+  idade Int @db.SmallInt
+  contato BigInt @db.BigInt
+  dataNascimento DateTime @db.Date
+  observacaoJogador String @db.VarChar(500)
+  equipe equipe @relation(fields: [idEquipe], references: [id])
+  posicao posicaoAtleta @relation(fields: [idPosicao], references: [id])
+}
