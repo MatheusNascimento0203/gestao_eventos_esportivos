@@ -11,12 +11,7 @@ export default class CreateEquipeController {
       treinador: z.string().min(5).max(60),
       quantidadeTitulos: z.number().int().min(-32768).max(32767),
       nomeSede: z.string().min(5).max(60),
-      contato: z.preprocess((arg) => {
-        if (typeof arg === "string") {
-          return BigInt(arg);
-        }
-        return arg;
-      }, z.bigint()),
+      contato: z.string().min(11).max(15),
       dataFundacao: z.preprocess((arg) => {
         if (typeof arg === "string") {
           return new Date(arg);
