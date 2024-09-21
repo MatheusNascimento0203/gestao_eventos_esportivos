@@ -11,19 +11,18 @@ export default class CreateEventoController {
       tipoEvento: z.string().min(5).max(30),
       dataInicial: z.preprocess((arg) => {
         if (typeof arg === "string") {
-          return new Date(arg); // Converte a string para Date
+          return new Date(arg);
         }
         return arg;
       }, z.date()),
       dataFinal: z.preprocess((arg) => {
         if (typeof arg === "string") {
-          return new Date(arg); // Converte a string para Date
+          return new Date(arg);
         }
         return arg;
       }, z.date()),
       horarioInicioEvento: z.preprocess((arg) => {
         if (typeof arg === "string") {
-          // Converte o horário "HH:mm:ss" para um objeto Date
           return dayjs(arg, "HH:mm:ss").toDate();
         }
         return arg;

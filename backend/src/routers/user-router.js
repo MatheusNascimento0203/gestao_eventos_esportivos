@@ -1,4 +1,4 @@
-import CreateUserController from "../controllers/create-user-controller.js";
+import CreateUserController from "../controllers/usuario/create-user-controller.js";
 import FindManyUserController from "../controllers/usuario/findMany-user-controller.js";
 import LoginUserController from "../controllers/usuario/login-user-controller.js";
 import isAutenticate from "../middlewares/isAutenticate.js";

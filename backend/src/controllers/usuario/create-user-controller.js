@@ -1,5 +1,5 @@
 import z from "zod";
-import CreateUserService from "../services/usuario/create-user-service.js";
+import CreateUserService from "../../services/usuario/create-user-service.js";
 
 export default class CreateUserController {
   async handle(req, reply) {

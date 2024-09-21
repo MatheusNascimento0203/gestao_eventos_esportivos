@@ -61,6 +61,7 @@ model atleta {
   id Int @id @default(autoincrement())
   idEquipe Int
   idPosicao Int
+  nomeAtleta String @db.VarChar(100)
   CPF String @db.VarChar(15)
   RG String @db.VarChar(20)
   idade Int @db.SmallInt
