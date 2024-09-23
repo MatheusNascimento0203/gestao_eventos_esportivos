@@ -1,22 +1,3 @@
-// export default ({ value, setValue, label, id, type }) => {
-//   return (
-//     <div className="flex flex-col w-48 gap-1">
-//       <label htmlFor={id} className="text-white">
-//         {label}
-//       </label>
-//       <input
-//         type={type}
-//         name={id}
-//         id={id}
-//         value={value}
-//         onChange={(e) => {
-//           return setValue(e.target.value);
-//         }}
-//       />
-//     </div>
-//   );
-// };
-
 export default ({
   value,
   setValue,
@@ -25,6 +6,7 @@ export default ({
   type,
   placeholder,
   cssInput,
+  step,
 }) => {
   return (
     <div className="relative">
@@ -40,6 +22,7 @@ export default ({
         type={type}
         placeholder={placeholder}
         value={value}
+        step={step}
         onChange={(e) => {
           return setValue(e.target.value);
         }}

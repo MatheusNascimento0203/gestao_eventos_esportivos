@@ -45,6 +45,12 @@ export default () => {
       const token = response.data.token;
       localStorage.setItem("token", token);
       redirectTo("/home");
+      toast.success("Seja bem vindo!", {
+        position: "bottom-center",
+        style: {
+          border: "2px solid green",
+        },
+      });
     } catch (error) {
       console.log(error);
     }

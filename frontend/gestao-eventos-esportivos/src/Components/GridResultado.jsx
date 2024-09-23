@@ -44,12 +44,12 @@ export default () => {
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-          <button
-            type="button"
+          <a
+            href="/home/createEvento"
             className="block rounded-md bg-[#26AB3B] px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
           >
             Adicionar Evento
-          </button>
+          </a>
         </div>
       </div>
       <div className="mt-8 flow-root">

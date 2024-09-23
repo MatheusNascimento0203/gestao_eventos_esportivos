@@ -3,6 +3,7 @@ import RootLayout from "../Components/RootLayout";
 import Login from "../Pages/Login";
 import CreateUser from "../Pages/CreateUser";
 import Home from "../Pages/Home";
+import SearchEvento from "../Pages/SearchEvento";
 import CreateEvento from "../Pages/CreateEvento";
 
 const router = createBrowserRouter([
@@ -23,7 +24,11 @@ const router = createBrowserRouter([
         element: <Home />,
         children: [
           {
-            path: "cadastrarEvento",
+            path: "searchEvento",
+            element: <SearchEvento />,
+          },
+          {
+            path: "createEvento",
             element: <CreateEvento />,
           },
         ],

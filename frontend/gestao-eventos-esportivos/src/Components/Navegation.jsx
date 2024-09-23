@@ -9,10 +9,12 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import logoHome from "../assets/Logohome.png";
+import handleLogout from "../hooks/handleLogout";
+import handleRedirect from "../hooks/handleRedirect";
 
 const navigation = [
   { name: "Página Inicial", href: "/home", current: true },
-  { name: "Evento", href: "/home/cadastrarEvento", current: false },
+  { name: "Evento", href: "/home/searchEvento", current: false },
   { name: "Equipe", href: "/stock", current: false },
   { name: "Atleta", href: "/stock", current: false },
 ];
@@ -22,7 +24,7 @@ function classNames(...classes) {
 }
 
 export default () => {
-  console.log();
+  const { redirectTo } = handleRedirect();
 
   return (
     <Disclosure as="nav" className="bg-[#26AB3B]">
@@ -111,12 +113,15 @@ export default () => {
                   </a>
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="#"
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      redirectTo("/");
+                    }}
                     className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
                   >
                     Sign out
-                  </a>
+                  </button>
                 </MenuItem>
               </MenuItems>
             </Menu>
