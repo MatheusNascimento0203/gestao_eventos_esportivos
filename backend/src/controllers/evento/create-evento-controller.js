@@ -1,6 +1,7 @@
 import z, { object } from "zod";
 import dayjs from "dayjs";
 import CreateEventoService from "../../services/evento/create-evento-service.js";
+import pkg from "dayjs";
 
 export default class CreateEventoController {
   async handle(req, reply) {
@@ -21,12 +22,7 @@ export default class CreateEventoController {
         }
         return arg;
       }, z.date()),
-      horarioInicioEvento: z.preprocess((arg) => {
-        if (typeof arg === "string") {
-          return dayjs(arg, "HH:mm:ss").toDate();
-        }
-        return arg;
-      }, z.date()),
+      horarioInicioEvento: z.coerce.date(),
     });
     const data = bodySchema.parse(req.body);
     const service = new CreateEventoService();

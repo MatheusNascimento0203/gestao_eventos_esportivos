@@ -1,6 +1,5 @@
 import db from "../../lib/db.js";
 import GenericError from "../../errors/generic-error.js";
-
 export default class CreateEventoService {
   async execute({
     nomeEvento,
