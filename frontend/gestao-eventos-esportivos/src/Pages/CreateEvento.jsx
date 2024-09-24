@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import Inputs from "../Components/Inputs";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 import handleRedirect from "../hooks/handleRedirect";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 export default () => {
   const [nomeEvento, setNomeEvento] = useState("");
@@ -25,19 +25,51 @@ export default () => {
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-    console.log("oi");
 
     const dataHora = `${dataInicio}T${horarioInicio}`;
     const quantidadeEquipesNum = Number(quantidadeEquipes);
-    // console.log({
-    //   nomeEvento,
-    //   local: localEvento,
-    //   quantidadeEquipes: q,
-    //   tipoEvento,
-    //   dataInicial: dataInicio,
-    //   dataFinal: dataFim,
-    //   horarioInicioEvento: dataHora,
-    // }); // Log
+    const dataAtual = new Date();
+    dataAtual.setHours(0, 0, 0, 0);
+    const dataFormatada = dataAtual.toISOString().split("T")[0];
+
+    //VALIDANDO PREENCHIMENTO DOS CAMPOS.
+    if (
+      (nomeEvento.trim() === "" || localEvento.trim() === "",
+      quantidadeEquipes.trim() === "",
+      tipoEvento.trim() === "",
+      dataInicio.trim() === "",
+      dataFim.trim() === "",
+      horarioInicio.trim() === "")
+    ) {
+      toast.error("Preencha todos os campos, por gentileza!", {
+        position: "bottom-center",
+        style: {
+          border: "2px solid red",
+        },
+      });
+      return;
+    }
+
+    //VALIDANDO CAMPOS DE DATAS
+    if (dataInicio < dataFormatada) {
+      toast.error("Data inicio não pode ser menor que a data atual.", {
+        position: "bottom-center",
+        style: {
+          border: "2px solid red",
+        },
+      });
+      return;
+    }
+
+    if (dataFim < dataInicio) {
+      toast.error("Data fim não pode ser menor que a data inicio.", {
+        position: "bottom-center",
+        style: {
+          border: "2px solid red",
+        },
+      });
+      return;
+    }
 
     try {
       const response = await axios.post(
@@ -57,20 +89,30 @@ export default () => {
           },
         }
       );
-
       toast.success("Cadastro realizado com sucesso!.", {
         position: "bottom-center",
         style: {
           border: "2px solid green",
         },
       });
+      setNomeEvento("");
+      setLocalEvento("");
+      setTipoEvento("");
+      setQuantidadeEquipes("");
+      setDataInicio("");
+      setDataFim("");
+      setHorarioInicio("");
     } catch (error) {
       console.log(error.message);
     }
   };
 
   return (
-    <div className="flex flex-col items-center pt-8 gap-4 rounded  w-[950px] h-[500px] ml-[200px] mt-[20px] shadow-sm shadow-green-950">
+    <div className="flex flex-col items-center pt-8 gap-4 rounded  w-[950px] h-[500px] ml-[200px] mt-[20px] shadow-sm shadow-green-950 border-t-2 border-t-[#26AB3B]">
+      <Helmet>
+        {/* <link rel="icon" href={iconLogin} /> */}
+        <title>Cadastrar Evento</title>
+      </Helmet>
       <div className="flex justify-start">
         <p className="font-montserrat text-xl font-bold pr-[750px]">Cadastro</p>
       </div>

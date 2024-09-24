@@ -52,7 +52,14 @@ export default () => {
         },
       });
     } catch (error) {
-      console.log(error);
+      if (error.response.status === 404) {
+        toast.error("E-mail ou senha estão incorretos!", {
+          position: "bottom-center",
+          style: {
+            border: "2px solid red",
+          },
+        });
+      }
     }
   };
 
