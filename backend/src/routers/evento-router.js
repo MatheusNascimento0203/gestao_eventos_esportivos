@@ -24,7 +24,7 @@ export default async function eventoRouter(app) {
     }
   );
 
-  //ROTA PARA APAGAR EVENTO
+  //ROTA PARA APAGAR EVENTO CADASTRADOS
   const deleteEventoController = new DeleteEventoController();
   app.delete(
     "/deletarProduto/:id",
