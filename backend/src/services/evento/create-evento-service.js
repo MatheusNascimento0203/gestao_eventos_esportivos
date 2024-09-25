@@ -39,7 +39,6 @@ export default class CreateEventoService {
         "A data final deve ser maior que a data inicio."
       );
     }
-    console.log(evento);
 
     return evento;
   }
