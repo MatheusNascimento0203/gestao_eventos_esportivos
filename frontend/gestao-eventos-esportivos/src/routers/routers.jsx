@@ -1,10 +1,10 @@
 import { createBrowserRouter, useNavigate } from "react-router-dom";
 import RootLayout from "../Components/RootLayout";
-import Login from "../Pages/Login";
-import CreateUser from "../Pages/CreateUser";
+import Login from "../Pages/user/Login";
+import CreateUser from "../Pages/user/CreateUser";
 import Home from "../Pages/Home";
-import SearchEvento from "../Pages/SearchEvento";
-import CreateEvento from "../Pages/CreateEvento";
+import SearchEvento from "../Pages/eventos/SearchEvento";
+import CreateEvento from "../Pages/eventos/CreateEvento";
 
 const router = createBrowserRouter([
   {

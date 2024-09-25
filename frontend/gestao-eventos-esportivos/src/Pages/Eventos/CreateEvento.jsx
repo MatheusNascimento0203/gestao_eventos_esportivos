@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Inputs from "../Components/Inputs";
+import Inputs from "../../Components/Inputs";
 import axios from "axios";
-import handleRedirect from "../hooks/handleRedirect";
+import handleRedirect from "../../hooks/handleRedirect";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
 

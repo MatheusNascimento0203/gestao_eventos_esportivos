@@ -7,10 +7,12 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import visualizarEvento from "../Pages/Eventos/VisualizarEvento";
 
 export default () => {
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
   const dataAtual = getDataAtual();
 
   //CHAMANDO API PARA PEGAR OS EVENTOS CADASTRADOS
@@ -54,6 +56,11 @@ export default () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  //MODAL DE VISUALIZAÇÃO DOS DADOS
+  const handleOpenModal = (value) => {
+    setModalOpen(false);
   };
 
   return (
@@ -188,12 +195,14 @@ export default () => {
                         <span className={statusClasse}>{statusTexto}</span>
                       </td>
                       <td className="flex gap-3 relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <a
-                          href="#"
+                        <button
+                          onClick={() => {
+                            handleOpenModal(true);
+                          }}
                           className="text-[#26AB3B] hover:text-green-700"
                         >
                           <EyeIcon className="h-5 w-5" />
-                        </a>
+                        </button>
                         <a
                           href="#"
                           className="text-[#2193F3] hover:text-indigo-900"

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import logo from "../assets/logo-sistema.svg";
-import logoSport from "../assets/logo-sport-events.svg";
-import iconLogin from "../assets/team.png";
-import Inputs from "../Components/Inputs";
+import logo from "../../assets/logo-sistema.svg";
+import logoSport from "../../assets/logo-sport-events.svg";
+import iconLogin from "../../assets/team.png";
+import Inputs from "../../Components/Inputs";
 import { Helmet } from "react-helmet";
-import handleRedirect from "../hooks/handleRedirect";
+import handleRedirect from "../../hooks/handleRedirect";
 
 export default () => {
   const [email, setEmail] = useState("");

@@ -1,13 +1,12 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import logo from "../assets/logo-sistema.svg";
-import logoSport from "../assets/logo-sport-events.svg";
-import userCreate from "../assets/coach.png";
-import Inputs from "../Components/Inputs";
+import logo from "../../assets/logo-sistema.svg";
+import logoSport from "../../assets/logo-sport-events.svg";
+import userCreate from "../../assets/coach.png";
+import Inputs from "../../Components/Inputs";
 import { Helmet } from "react-helmet";
-import TitlePages from "../Components/TitlePages";
-import handleRedirect from "../hooks/handleRedirect";
+import handleRedirect from "../../hooks/handleRedirect";
 
 export default () => {
   const [nome, setNome] = useState("");
