@@ -32,6 +32,30 @@ export default () => {
     eventos();
   }, []);
 
+  //EXCLUINDO EVENTO
+  const deleteEvento = async (id) => {
+    const token = window.localStorage.getItem("token");
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/deletarProduto/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setEventos(
+        eventos.filter((evento) => {
+          if (evento.id !== id) {
+            return evento;
+          }
+        })
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="px-48 pt-24">
       <div className="sm:flex sm:items-center">
@@ -54,49 +78,52 @@ export default () => {
       </div>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <div
+            className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8"
+            style={{ maxHeight: "300px", overflowY: "auto" }}
+          >
             <table className="min-w-full divide-y divide-gray-300">
-              <thead>
+              <thead className="bg-[#26AB3B]">
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-4"
+                    className="  py-3.5 pl-4 pr-3 text-left text-sm text-white font-montserrat font-bold sm:pl-4"
                   >
                     Nome Evento
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
                     Local Evento
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
                     Quantidade Equipes
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
                     Data Inicio
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
                     Data Encerramento
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
                     Status
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
                     Ações
                   </th>
@@ -173,12 +200,14 @@ export default () => {
                         >
                           <PencilSquareIcon className="h-5 w-5" />
                         </a>
-                        <a
-                          href="#"
+                        <button
+                          onClick={() => {
+                            deleteEvento(evento.id);
+                          }}
                           className="text-[#D40606] hover:text-red-900"
                         >
                           <TrashIcon className="h-5 w-5" />
-                        </a>
+                        </button>
                       </td>
                     </tr>
                   );
