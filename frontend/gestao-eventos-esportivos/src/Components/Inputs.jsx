@@ -7,6 +7,7 @@ export default ({
   placeholder,
   cssInput,
   step,
+  defaultValue,
 }) => {
   return (
     <div className="relative">
@@ -23,6 +24,7 @@ export default ({
         placeholder={placeholder}
         value={value}
         step={step}
+        defaultValue={defaultValue}
         onChange={(e) => {
           return setValue(e.target.value);
         }}

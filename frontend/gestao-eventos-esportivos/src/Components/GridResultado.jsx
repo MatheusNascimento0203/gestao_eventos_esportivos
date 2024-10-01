@@ -9,11 +9,13 @@ import {
 } from "@heroicons/react/24/solid";
 import visualizarEvento from "../Pages/Eventos/VisualizarEvento";
 import VisualizarEvento from "../Pages/Eventos/VisualizarEvento";
+import EditarEvento from "../Pages/Eventos/editarEvento";
 
 export default () => {
   const [eventos, setEventos] = useState([]);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [selectedEventoId, setSelectedEventoId] = useState(null);
+  const [modalType, setModalType] = useState(null);
   const dataAtual = getDataAtual();
 
   //CHAMANDO API PARA PEGAR OS EVENTOS CADASTRADOS
@@ -57,6 +59,13 @@ export default () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  // Handle click para abrir o modal com o evento selecionado
+  const handleOpenModal = (id, type) => {
+    setSelectedEventoId(id);
+    setModalType(type);
+    setOpen(true);
   };
 
   return (
@@ -194,18 +203,21 @@ export default () => {
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setOpen(true);
+                            handleOpenModal(evento.id, "visualizar");
                           }}
                           className="text-[#26AB3B] hover:text-green-700"
                         >
                           <EyeIcon className="h-5 w-5" />
                         </button>
-                        <a
-                          href="#"
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleOpenModal(evento.id, "editar");
+                          }}
                           className="text-[#2193F3] hover:text-indigo-900"
                         >
                           <PencilSquareIcon className="h-5 w-5" />
-                        </a>
+                        </button>
                         <button
                           onClick={() => {
                             deleteEvento(evento.id);
@@ -223,7 +235,12 @@ export default () => {
           </div>
         </div>
       </div>
-      {open && <VisualizarEvento open={open} setOpen={setOpen} />}
+      {open && modalType === "visualizar" && (
+        <VisualizarEvento open={open} setOpen={setOpen} id={selectedEventoId} />
+      )}
+      {open && modalType === "editar" && (
+        <EditarEvento open={open} setOpen={setOpen} id={selectedEventoId} />
+      )}
     </div>
   );
 };
