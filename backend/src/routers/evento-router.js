@@ -2,6 +2,7 @@ import CreateEventoController from "../controllers/evento/create-evento-controll
 import DeleteEventoController from "../controllers/evento/delete-evento-controller.js";
 import FindEventoController from "../controllers/evento/find-evento-controller.js";
 import FindManyEventoController from "../controllers/evento/findMany-evento-controller.js";
+import UpdateEventoController from "../controllers/evento/update-evento-controller.js";
 import isAutenticate from "../middlewares/isAutenticate.js";
 
 export default async function eventoRouter(app) {
@@ -34,6 +35,18 @@ export default async function eventoRouter(app) {
     },
     async (request, reply) => {
       await findEventoController.handle(request, reply);
+    }
+  );
+
+  //ROTA PARA ALTERAR EVENTO
+  const updateEventoController = new UpdateEventoController();
+  app.put(
+    "/updateEvento/:id",
+    {
+      preHandler: isAutenticate,
+    },
+    async (request, reply) => {
+      await updateEventoController.handle(request, reply);
     }
   );
 

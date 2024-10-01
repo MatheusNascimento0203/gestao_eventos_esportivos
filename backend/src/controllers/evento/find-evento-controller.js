@@ -2,7 +2,7 @@ import { z } from "zod";
 import FindEventoService from "../../services/evento/find-evento-service.js";
 
 export default class FindEventoController {
-  async handle(reply, req) {
+  async handle(req, reply) {
     const paramsSchema = z.object({
       id: z.coerce.number(),
     });
@@ -10,12 +10,14 @@ export default class FindEventoController {
     const service = new FindEventoService();
     const evento = await service.execute({ id });
 
-    reply.status(200).send(
-      evento.map((element) => ({
-        ...element,
-        horarioInicioEvento:
-          element.horarioInicioEvento.toLocaleTimeString("pt-BR"),
-      }))
-    );
+    if (!evento) {
+      return reply.status(404).send({ error: "Evento não encontrado" });
+    }
+
+    reply.status(200).send({
+      ...evento,
+      horarioInicioEvento:
+        evento.horarioInicioEvento.toLocaleTimeString("pt-BR"),
+    });
   }
 }
