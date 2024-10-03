@@ -53,7 +53,7 @@ export default async function eventoRouter(app) {
   //ROTA PARA APAGAR EVENTO CADASTRADOS
   const deleteEventoController = new DeleteEventoController();
   app.delete(
-    "/deletarProduto/:id",
+    "/deletarEvento/:id",
     {
       preHandler: isAutenticate,
     },
