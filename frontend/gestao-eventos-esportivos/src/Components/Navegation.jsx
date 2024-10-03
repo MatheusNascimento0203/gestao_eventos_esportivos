@@ -15,7 +15,7 @@ import handleRedirect from "../hooks/handleRedirect";
 const navigation = [
   { name: "Página Inicial", href: "/home", current: true },
   { name: "Evento", href: "/home/searchEvento", current: false },
-  { name: "Equipe", href: "/stock", current: false },
+  { name: "Equipe", href: "/home/searchEquipe", current: false },
   { name: "Atleta", href: "/stock", current: false },
 ];
 

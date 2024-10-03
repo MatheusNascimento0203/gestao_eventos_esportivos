@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import formatDate from "../hooks/formatDate";
-import getDataAtual from "../hooks/getDataAtual";
+import formatDate from "../../hooks/formatDate";
+import getDataAtual from "../../hooks/getDataAtual";
 import {
   EyeIcon,
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import visualizarEvento from "../Pages/Eventos/VisualizarEvento";
-import VisualizarEvento from "../Pages/Eventos/VisualizarEvento";
-import EditarEvento from "../Pages/Eventos/editarEvento";
+import formatContato from "../../hooks/formatContato";
+// import VisualizarEvento from "./VisualizarEvento";
+// import EditarEvento from "./editarEvento";
 
 export default () => {
-  const [eventos, setEventos] = useState([]);
+  const [equipes, setEquipes] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedEventoId, setSelectedEventoId] = useState(null);
   const [modalType, setModalType] = useState(null);
@@ -21,38 +21,38 @@ export default () => {
   //CHAMANDO API PARA PEGAR OS EVENTOS CADASTRADOS
   useEffect(() => {
     const token = window.localStorage.getItem("token");
-    const eventos = async () => {
+    const equipes = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/findEventos", {
+        const response = await axios.get("http://localhost:3000/findEquipes", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        setEventos(response.data);
+        setEquipes(response.data);
       } catch (error) {
         console.log(error);
       }
     };
 
-    eventos();
-  }, []);
+    equipes();
+  }, [open]);
 
   //EXCLUINDO EVENTO
-  const deleteEvento = async (id) => {
+  const deleteEquipe = async (id) => {
     const token = window.localStorage.getItem("token");
     try {
       const response = await axios.delete(
-        `http://localhost:3000/deletarProduto/${id}`,
+        `http://localhost:3000/deletarEquipe/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setEventos(
-        eventos.filter((evento) => {
-          if (evento.id !== id) {
-            return evento;
+      setEquipes(
+        equipes.filter((equipe) => {
+          if (equipe.id !== id) {
+            return equipe;
           }
         })
       );
@@ -72,19 +72,19 @@ export default () => {
     <div className="px-48 pt-24">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Eventos
+          <h1 className="text-base font-semibold leading-6 text-gray-900 font-montserrat">
+            Equipes
           </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            Segue abaixo a lista de todos os eventos cadastrados.
+          <p className="mt-2 text-sm text-gray-700 font-montserrat">
+            Segue abaixo a lista de todas as equipes cadastradas.
           </p>
         </div>
         <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
           <a
-            href="/home/createEvento"
-            className="block rounded-md bg-[#26AB3B] px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700"
+            href="/home/createEquipe"
+            className="block rounded-md bg-[#26AB3B] px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-700 font-montserrat"
           >
-            Adicionar Evento
+            Adicionar Equipe
           </a>
         </div>
       </div>
@@ -101,37 +101,31 @@ export default () => {
                     scope="col"
                     className="  py-3.5 pl-4 pr-3 text-left text-sm text-white font-montserrat font-bold sm:pl-4"
                   >
-                    Nome Evento
+                    Nome Equipe
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
-                    Local Evento
+                    Presidente
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
-                    Quantidade Equipes
+                    Quantidade Atletas
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
-                    Data Inicio
+                    Contato
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
                   >
-                    Data Encerramento
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm text-white font-montserrat font-bold"
-                  >
-                    Status
+                    Data Fundação
                   </th>
                   <th
                     scope="col"
@@ -145,59 +139,31 @@ export default () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {eventos.map((evento) => {
-                  //VARIÁVEIS PARA VALIDAÇÃO
-                  const dataInicialEventoFormatada = formatDate(
-                    evento.dataInicial
-                  );
-                  const dataFinalEventoFormatada = formatDate(evento.dataFinal);
-                  //COMPARAÇÃO DAS DATAS
-                  const isNaoIniciado = dataAtual < dataInicialEventoFormatada;
-                  const isEmAndamento =
-                    dataAtual >= dataInicialEventoFormatada &&
-                    dataAtual <= dataFinalEventoFormatada;
-                  const isEncerrado = dataAtual > dataFinalEventoFormatada;
-                  //DETERMINANDO TEXTO E A CLASSE A SER EXIBIDA
-                  let statusTexto, statusClasse;
-                  if (isNaoIniciado) {
-                    statusTexto = "Não Iniciado";
-                    statusClasse =
-                      "inline-flex items-center rounded-md bg-yellow-200 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
-                  } else if (isEmAndamento) {
-                    statusTexto = "Em Andamento";
-                    statusClasse =
-                      "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
-                  } else if (isEncerrado) {
-                    statusTexto = "Encerrado";
-                    statusClasse =
-                      "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
-                  }
-                  //--//
+                {equipes.map((equipe) => {
                   return (
-                    <tr key={evento.id}>
+                    <tr key={equipe.id}>
                       <td className="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
                         <div className="flex items-center">
                           <div className="ml-4">
-                            <div className="font-medium text-gray-900">
-                              {evento.nomeEvento}
+                            <div className="font-montserrat text-gray-900">
+                              {equipe.nomeEquipe}
                             </div>
                           </div>
                         </div>
                       </td>
                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <div className="text-gray-900">{evento.local}</div>
+                        <div className="text-gray-900 font-montserrat">
+                          {equipe.nomePresidente}
+                        </div>
                       </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">
-                        {`${evento.quantidadeEquipes} - jogadores`}
+                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900 font-montserrat">
+                        {`${equipe.quantidadeAtletas} - atletas`}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">
-                        {formatDate(evento.dataInicial)}
+                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900 font-montserrat">
+                        {formatContato(equipe.contato)}
                       </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900">
-                        {formatDate(evento.dataFinal)}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                        <span className={statusClasse}>{statusTexto}</span>
+                      <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900 font-montserrat">
+                        {formatDate(equipe.dataFundacao)}
                       </td>
                       <td className="flex gap-3 relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <button
@@ -220,7 +186,7 @@ export default () => {
                         </button>
                         <button
                           onClick={() => {
-                            deleteEvento(evento.id);
+                            deleteEquipe(equipe.id);
                           }}
                           className="text-[#D40606] hover:text-red-900"
                         >
@@ -235,12 +201,12 @@ export default () => {
           </div>
         </div>
       </div>
-      {open && modalType === "visualizar" && (
+      {/* {open && modalType === "visualizar" && (
         <VisualizarEvento open={open} setOpen={setOpen} id={selectedEventoId} />
       )}
       {open && modalType === "editar" && (
         <EditarEvento open={open} setOpen={setOpen} id={selectedEventoId} />
-      )}
+      )} */}
     </div>
   );
 };

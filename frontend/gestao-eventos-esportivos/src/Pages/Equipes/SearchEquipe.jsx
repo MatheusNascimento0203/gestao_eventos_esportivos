@@ -1,9 +1,9 @@
-import GridEventos from "./GridEventos";
+import GridEquipes from "./GridEquipes";
 
 export default () => {
   return (
     <div>
-      <GridEventos />
+      <GridEquipes />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 import Inputs from "../../Components/Inputs";
 import { toast } from "react-toastify";
+import formatDateYDM from "../../hooks/formatDateYDM";
 
 export default ({ open, setOpen, id }) => {
   const [evento, setEvento] = useState(null);
@@ -36,26 +37,33 @@ export default ({ open, setOpen, id }) => {
         }
       );
       const eventoData = response.data;
+      const formattedDataInicial = formatDateYDM(eventoData.dataInicial);
+      const formattedDataFinal = formatDateYDM(eventoData.dataFinal);
+
       setEvento(eventoData);
       setNomeEvento(eventoData.nomeEvento);
       setLocalEvento(eventoData.local);
       setQuantidadeEquipes(eventoData.quantidadeEquipes);
       setTipoEvento(eventoData.tipoEvento);
-      setDataInicio(eventoData.dataInicial.split("T")[0]);
-      setDataFim(eventoData.dataFinal.split("T")[0]);
-      setHorarioInicio(eventoData.horarioInicioEvento.split("T")[1]);
+      setDataInicio(formattedDataInicial);
+      setDataFim(formattedDataFinal);
+      setHorarioInicio(eventoData.horarioInicioEvento);
     } catch (error) {
-      console.log(error);
-      toast.error("Erro ao carregar o evento.");
+      toast.error("Error ao cadastrar evento. Contate o administrador!", {
+        position: "bottom-center",
+        style: {
+          border: "2px solid red",
+        },
+      });
     }
   };
 
   // CHAMANDO API PARA PEGAR OS EVENTOS CADASTRADOS
   const handleSubmitEdit = async (ev) => {
     ev.preventDefault();
-    console.log("OI");
 
     const dataHora = `${dataInicio}T${horarioInicio}`;
+
     const quantidadeEquipesNum = Number(quantidadeEquipes);
     const dataAtual = new Date();
     dataAtual.setHours(0, 0, 0, 0);
@@ -120,10 +128,16 @@ export default ({ open, setOpen, id }) => {
           },
         }
       );
-      toast.success("Evento atualizado com sucesso!");
+      toast.success("Evento editado com sucesso!.", {
+        position: "bottom-center",
+        style: {
+          border: "2px solid green",
+        },
+      });
       setOpen(false);
     } catch (error) {
       console.log(error);
+      console.log(dataHora);
       toast.error("Erro ao atualizar o evento.");
     }
   };
@@ -144,7 +158,7 @@ export default ({ open, setOpen, id }) => {
           <form onSubmit={handleSubmitEdit}>
             <DialogPanel
               transition
-              className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in  sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 w-[900px] h-[500px]"
+              className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in  sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95 w-[900px] h-[400px]"
             >
               <div className="absolute right-0 top-0 hidden pr-4 pt-4 sm:block">
                 <button
@@ -166,6 +180,7 @@ export default ({ open, setOpen, id }) => {
                   </DialogTitle>
                   {evento ? (
                     <div>
+                      {console.log(evento.formattedDate)}
                       <div className="flex flex-col gap-8">
                         <div className="flex gap-10 items-center">
                           <Inputs
@@ -217,9 +232,9 @@ export default ({ open, setOpen, id }) => {
                         </div>
                         <div className="flex gap-10 items-center">
                           <Inputs
-                            id={evento.dataInicial}
+                            id={dataInicio}
                             label={"Data Inicio"}
-                            defaultValue={evento.dataInicial}
+                            defaultValue={dataInicio}
                             setValue={setDataInicio}
                             placeholder={"Data Inicio"}
                             type={"date"}
@@ -228,9 +243,9 @@ export default ({ open, setOpen, id }) => {
                             }
                           />
                           <Inputs
-                            id={evento.dataFinal}
+                            id={dataFim}
                             label={"Data Encerramento"}
-                            defaultValue={evento.dataFinal}
+                            defaultValue={dataFim}
                             setValue={setDataFim}
                             placeholder={"Data Encerramento"}
                             type={"date"}
@@ -267,8 +282,8 @@ export default ({ open, setOpen, id }) => {
                   Salvar
                 </button>
                 <button
-                  type="submit"
-                  // onClick={() => setOpen(false)}
+                  type="button"
+                  onClick={() => setOpen(false)}
                   className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                 >
                   Cancelar

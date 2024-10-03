@@ -3,8 +3,10 @@ import RootLayout from "../Components/RootLayout";
 import Login from "../Pages/user/Login";
 import CreateUser from "../Pages/user/CreateUser";
 import Home from "../Pages/Home";
-import SearchEvento from "../Pages/eventos/SearchEvento";
 import CreateEvento from "../Pages/eventos/CreateEvento";
+import SearchEquipe from "../Pages/Equipes/SearchEquipe";
+import SearchEvento from "../Pages/Eventos/SearchEvento";
+import CreateEquipe from "../Pages/Equipes/CreateEquipe";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
           {
             path: "createEvento",
             element: <CreateEvento />,
+          },
+          {
+            path: "searchEquipe",
+            element: <SearchEquipe />,
+          },
+          {
+            path: "CreateEquipe",
+            element: <CreateEquipe />,
           },
         ],
       },
