@@ -4,9 +4,10 @@ import axios from "axios";
 import handleRedirect from "../../hooks/handleRedirect";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
+import formatContatoInput from "../../hooks/formatContatoInput";
 
 export default () => {
-  const [idEvento, setIdEvento] = useState("");
+  const [evento, setEvento] = useState([]);
   const [nomeEquipe, setNomeEquipe] = useState("");
   const [nomePresidente, setNomePresidente] = useState("");
   const [quantidadeAtletas, setQuantidadeAtletas] = useState("");
@@ -17,18 +18,29 @@ export default () => {
   const [dataFundacao, setDataFundacao] = useState("");
   const [observacaoEquipe, setObservacaoEquipe] = useState("");
 
-  const token = localStorage.getItem("token");
-  const { redirectTo } = handleRedirect();
-
+  //CHAMANDO API PARA PEGAR OS EVENTOS CADASTRADOS
   useEffect(() => {
-    if (!token) {
-      redirectTo("/");
-    }
-  }, []);
+    const token = window.localStorage.getItem("token");
+    const eventos = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/findEventos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setEvento(response.data);
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+
+    eventos();
+  }, [open]);
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
 
+    const token = localStorage.getItem("token");
     const quantidadeJogadoresNum = Number(quantidadeAtletas);
     const quantidadeTitulosNum = Number(quantidadeTitulos);
     const dataAtual = new Date();
@@ -37,7 +49,7 @@ export default () => {
 
     //VALIDANDO PREENCHIMENTO DOS CAMPOS.
     if (
-      idEvento.trim() === "" ||
+      evento.trim() === "" ||
       nomeEquipe.trim() === "" ||
       nomePresidente.trim() === "" ||
       quantidadeAtletas.trim() === "" ||
@@ -71,12 +83,12 @@ export default () => {
       const response = await axios.post(
         "http://localhost:3000/cadastrarEquipe",
         {
-          idEvento,
+          idEvento: evento,
           nomeEquipe,
           nomePresidente,
-          quantidadeAtletas,
+          quantidadeAtletas: quantidadeJogadoresNum,
           nomeTreinador,
-          quantidadeTitulos,
+          quantidadeTitulos: quantidadeTitulosNum,
           nomeSede,
           contato,
           dataFundacao,
@@ -104,6 +116,18 @@ export default () => {
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  const handleChangeContato = (e) => {
+    const valorDigitado = e.target.value;
+    // Permitir a exclusão completa sem reformatar
+    if (e.nativeEvent.inputType === "deleteContentBackward") {
+      setContato(valorDigitado); // Deixa o campo igual ao valor digitado sem formatação
+      return;
+    }
+    // Aplicar a formatação apenas quando o usuário estiver digitando
+    const valorFormatado = formatContatoInput(valorDigitado);
+    setContato(valorFormatado);
   };
 
   return (
@@ -142,41 +166,95 @@ export default () => {
               aria-label="Evento"
               className="w-[400px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] focus:rounded sm:text-sm sm:leading-6 font-montserrat h-[36px]"
             >
-              <option value={idEvento} className="font-montserrat">
+              <option value="" className="font-montserrat">
                 Selecione o evento
               </option>
-              <option value={idEvento} className="font-montserrat">
-                Selecione o evento
-              </option>
-              <option value={idEvento} className="font-montserrat">
-                Selecione o evento
-              </option>
+              {evento.map((ev) => {
+                return (
+                  <option value={ev.id} className="font-montserrat">
+                    {ev.nomeEvento}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
         <div className="flex gap-10 items-center">
-          {/* <Inputs
-            id={tipoEvento}
-            label={"Tipo do Evento"}
-            value={tipoEvento}
-            setValue={setTipoEvento}
-            placeholder={"Tipo do Evento"}
+          <Inputs
+            id={nomePresidente}
+            label={"Presidente"}
+            value={nomePresidente}
+            setValue={setNomePresidente}
+            placeholder={"Nome Presidente"}
             type={"text"}
             cssInput={
-              "block w-[400px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+              "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
             }
           />
           <Inputs
-            id={quantidadeEquipes}
-            label={"Quantidade de Equipes"}
-            value={quantidadeEquipes}
-            setValue={setQuantidadeEquipes}
-            placeholder={"Quantidade de Equipes"}
+            id={nomeTreinador}
+            label={"Treinador"}
+            value={nomeTreinador}
+            setValue={setNomeTreinador}
+            placeholder={"Nome Treinador"}
+            type={"text"}
+            cssInput={
+              "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+            }
+          />
+          <Inputs
+            id={nomeSede}
+            label={"Sede"}
+            value={nomeSede}
+            setValue={setNomeSede}
+            placeholder={"Nome Sede Equipe"}
+            type={"text"}
+            cssInput={
+              "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+            }
+          />
+        </div>
+        <div className="flex gap-10 items-center">
+          <div>
+            <label
+              htmlFor="contato"
+              className="absolute top-[324px] left-[266px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat"
+            >
+              Contato
+            </label>
+            <input
+              type="text"
+              value={contato}
+              id={contato}
+              placeholder="(XX) XXXXX-XXXX"
+              onChange={(e) => {
+                handleChangeContato(e);
+              }}
+              className="block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+            />
+          </div>
+          <Inputs
+            id={quantidadeAtletas}
+            label={"Quantidade Atletas"}
+            value={quantidadeAtletas}
+            setValue={setQuantidadeAtletas}
+            placeholder={"Quantidade Atletas"}
             type={"number"}
             cssInput={
-              "block w-[400px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+              "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
             }
-          /> */}
+          />
+          <Inputs
+            id={quantidadeTitulos}
+            label={"Quantidade Títulos"}
+            value={quantidadeTitulos}
+            setValue={setQuantidadeTitulos}
+            placeholder={"Quantidade Títulos"}
+            type={"number"}
+            cssInput={
+              "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+            }
+          />
         </div>
         <div className="flex gap-10 items-center">
           {/* <Inputs
