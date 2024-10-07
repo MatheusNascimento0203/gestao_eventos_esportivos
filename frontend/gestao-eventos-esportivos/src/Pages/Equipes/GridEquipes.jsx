@@ -160,7 +160,7 @@ export default () => {
                         {`${equipe.quantidadeAtletas} - atletas`}
                       </td>
                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900 font-montserrat">
-                        {formatContato(equipe.contato)}
+                        {equipe.contato}
                       </td>
                       <td className="whitespace-nowrap px-3 py-5 text-sm text-gray-900 font-montserrat">
                         {formatDate(equipe.dataFundacao)}
