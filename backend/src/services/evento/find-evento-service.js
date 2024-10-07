@@ -7,7 +7,6 @@ export default class FindEventoService {
         id,
       },
     });
-    console.log(evento);
     return evento;
   }
 }
