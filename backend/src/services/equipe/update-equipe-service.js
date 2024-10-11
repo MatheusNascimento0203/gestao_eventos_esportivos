@@ -1,8 +1,8 @@
-import GenericError from "../../errors/generic-error.js";
 import db from "../../lib/db.js";
 
-export default class CreateEquipeService {
+export default class UpdateEquipeService {
     async execute({
+        id,
         idEvento,
         nomeEquipe,
         quantidadeAtletas,
@@ -14,7 +14,10 @@ export default class CreateEquipeService {
         dataFundacao,
         observacaoEquipe,
     }) {
-        const equipe = await db.equipe.create({
+        await db.equipe.update({
+            where: {
+                id,
+            },
             data: {
                 idEvento,
                 nomeEquipe,
@@ -28,6 +31,5 @@ export default class CreateEquipeService {
                 observacaoEquipe,
             },
         });
-        return equipe;
     }
 }

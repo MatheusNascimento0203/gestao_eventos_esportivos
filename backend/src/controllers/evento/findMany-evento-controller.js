@@ -5,8 +5,6 @@ export default class FindManyEventoController {
     const service = new FindManyEventoService();
     const eventos = await service.execute();
 
-    console.log(eventos);
-
     return reply.status(200).send(
       eventos.map((element) => ({
         ...element,
