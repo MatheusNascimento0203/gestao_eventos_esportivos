@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import formatDate from "../../hooks/formatDate";
-import getDataAtual from "../../hooks/getDataAtual";
 import { EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
-import formatContato from "../../hooks/formatContato";
-// import VisualizarEvento from "./VisualizarEvento";
-// import EditarEvento from "./editarEvento";
+import VisualizarEquipe from "./visualizarEquipe";
+import UpdateEquipe from "./UpdateEquipe";
 
 export default () => {
     const [equipes, setEquipes] = useState([]);
     const [open, setOpen] = useState(false);
-    const [selectedEventoId, setSelectedEventoId] = useState(null);
+    const [selectedEquipeId, setSelectedEquipeId] = useState(null);
     const [modalType, setModalType] = useState(null);
-    const dataAtual = getDataAtual();
 
     //CHAMANDO API PARA PEGAR OS EVENTOS CADASTRADOS
     useEffect(() => {
@@ -56,7 +53,7 @@ export default () => {
 
     // Handle click para abrir o modal com o evento selecionado
     const handleOpenModal = (id, type) => {
-        setSelectedEventoId(id);
+        setSelectedEquipeId(id);
         setModalType(type);
         setOpen(true);
     };
@@ -152,7 +149,7 @@ export default () => {
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        handleOpenModal(evento.id, "visualizar");
+                                                        handleOpenModal(equipe.id, "visualizar");
                                                     }}
                                                     className="text-[#26AB3B] hover:text-green-700">
                                                     <EyeIcon className="h-5 w-5" />
@@ -160,7 +157,7 @@ export default () => {
                                                 <button
                                                     onClick={(e) => {
                                                         e.preventDefault();
-                                                        handleOpenModal(evento.id, "editar");
+                                                        handleOpenModal(equipe.id, "editar");
                                                     }}
                                                     className="text-[#2193F3] hover:text-indigo-900">
                                                     <PencilSquareIcon className="h-5 w-5" />
@@ -181,12 +178,11 @@ export default () => {
                     </div>
                 </div>
             </div>
-            {/* {open && modalType === "visualizar" && (
-        <VisualizarEvento open={open} setOpen={setOpen} id={selectedEventoId} />
-      )}
-      {open && modalType === "editar" && (
-        <EditarEvento open={open} setOpen={setOpen} id={selectedEventoId} />
-      )} */}
+            {open && modalType === "visualizar" && (
+                <VisualizarEquipe open={open} setOpen={setOpen} id={selectedEquipeId} />
+            )}
+
+            {open && modalType === "editar" && <UpdateEquipe open={open} setOpen={setOpen} id={selectedEquipeId} />}
         </div>
     );
 };
