@@ -72,7 +72,7 @@ export default () => {
       <div className="flex min-h-screen">
         <div className=" w-2/4 flex flex-col items-center justify-center gap-16">
           <div>
-            <p className=" font-montserrat font-bold text-4xl">Entrar</p>
+            <p className=" font-montserrat font-bold text-4xl">ENTRAR</p>
           </div>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <Inputs
