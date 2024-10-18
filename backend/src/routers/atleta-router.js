@@ -2,6 +2,7 @@ import CreateAtletaController from "../controllers/atleta/create-atleta-controll
 import DeleteAtletaController from "../controllers/atleta/delete-atleta-controller.js";
 import FindAtletaController from "../controllers/atleta/find-atleta-controller.js";
 import FindManyAtletaController from "../controllers/atleta/findMany-atleta-controller.js";
+import UpdateAtletaController from "../controllers/atleta/update-atleta-controller.js";
 import isAutenticate from "../middlewares/isAutenticate.js";
 
 export default async function atletaRouter(app) {
@@ -47,6 +48,18 @@ export default async function atletaRouter(app) {
 
         async (req, reply) => {
             await deleteAtletaController.handle(req, reply);
+        }
+    );
+
+    const updateAtletaController = new UpdateAtletaController();
+    app.put(
+        "/updateAtleta/:id",
+        {
+            preHandler: isAutenticate,
+        },
+
+        async (req, reply) => {
+            await updateAtletaController.handle(req, reply);
         }
     );
 }

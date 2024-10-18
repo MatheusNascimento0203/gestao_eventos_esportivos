@@ -1,4 +1,4 @@
-import db from "../../lib/db";
+import db from "../../lib/db.js";
 
 export default class UpdateAtletaService {
     async execute({ id, idEquipe, idPosicao, nomeAtleta, CPF, RG, idade, contato, dataNascimento, observacaoJogador }) {

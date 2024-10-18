@@ -1,4 +1,5 @@
 import { z } from "zod";
+import UpdateAtletaService from "../../services/atleta/update-atleta-service.js";
 
 export default class UpdateAtletaController {
     async handle(req, reply) {
@@ -21,5 +22,10 @@ export default class UpdateAtletaController {
             }, z.date()),
             observacaoJogador: z.string().min(5).max(500),
         });
+        const service = new UpdateAtletaService();
+        const { id } = paramsSchema.parse(req.params);
+        const atleta = bodySchema.parse(req.body);
+        await service.execute({ id, ...atleta });
+        reply.status(200).send("Atleta editado com sucesso.");
     }
 }

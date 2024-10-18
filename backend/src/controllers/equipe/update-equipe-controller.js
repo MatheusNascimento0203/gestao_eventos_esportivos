@@ -28,6 +28,6 @@ export default class UpdateEquipeController {
         const { id } = paramsSchema.parse(req.params);
         const service = new UpdateEquipeService();
         await service.execute({ id, ...data });
-        return reply.status(200).send();
+        return reply.status(200).send("Equipe editada com sucesso!");
     }
 }
