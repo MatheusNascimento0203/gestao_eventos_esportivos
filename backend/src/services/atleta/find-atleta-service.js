@@ -1,16 +1,16 @@
 import db from "../../lib/db.js";
 
-export default class FindEquipeService {
+export default class FindAtletaService {
     async execute({ id }) {
-        const equipe = await db.equipe.findUnique({
+        const atleta = await db.atleta.findUnique({
             where: {
                 id,
             },
             include: {
-                evento: true,
+                equipe: true,
+                posicao: true,
             },
         });
-
-        return equipe;
+        return atleta;
     }
 }

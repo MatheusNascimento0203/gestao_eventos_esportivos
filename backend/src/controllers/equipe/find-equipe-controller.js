@@ -10,9 +10,6 @@ export default class FindEquipeController {
         const service = new FindEquipeService();
         const { id } = paramsSchema.parse(req.params);
         const equipe = await service.execute({ id });
-
-        console.log(equipe);
-
         if (!equipe) {
             return reply.status(404).send({ error: "Equipe não encontrada." });
         }
