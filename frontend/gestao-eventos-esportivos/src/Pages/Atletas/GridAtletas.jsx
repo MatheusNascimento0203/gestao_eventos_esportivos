@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import VisualizarAtleta from "./VisualizarAtleta";
+import UpdateAtleta from "./UpdateAtleta";
 
 export default () => {
     const [atletas, setAtletas] = useState([]);
@@ -43,6 +45,12 @@ export default () => {
                     }
                 })
             );
+            toast.success("Atleta excluido com sucesso!", {
+                position: "bottom-center",
+                style: {
+                    border: "2px solid green",
+                },
+            });
         } catch (error) {
             console.log(error);
         }
@@ -59,9 +67,9 @@ export default () => {
         <div className="px-48 pt-24">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    <h1 className="text-base font-semibold leading-6 text-gray-900 font-montserrat">Equipes</h1>
+                    <h1 className="text-base font-semibold leading-6 text-gray-900 font-montserrat">Atletas</h1>
                     <p className="mt-2 text-sm text-gray-700 font-montserrat">
-                        Segue abaixo a lista de todas as equipes cadastradas.
+                        Segue abaixo a lista de todos os atletas cadastrados.
                     </p>
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
@@ -175,11 +183,11 @@ export default () => {
                     </div>
                 </div>
             </div>
-            {/* {open && modalType === "visualizar" && (
-                <VisualizarEquipe open={open} setOpen={setOpen} id={selectedEquipeId} />
+            {open && modalType === "visualizar" && (
+                <VisualizarAtleta open={open} setOpen={setOpen} id={selectedAtletaId} />
             )}
 
-            {open && modalType === "editar" && <UpdateEquipe open={open} setOpen={setOpen} id={selectedEquipeId} />} */}
+            {open && modalType === "editar" && <UpdateAtleta open={open} setOpen={setOpen} id={selectedAtletaId} />}
         </div>
     );
 };

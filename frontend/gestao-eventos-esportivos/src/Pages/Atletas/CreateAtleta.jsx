@@ -8,6 +8,8 @@ import returnIdade from "../../hooks/returnIdade.js";
 
 export default () => {
     const [atletas, setAtletas] = useState([]);
+    const [equipes, setEquipes] = useState([]);
+    const [posicoes, setPosicoes] = useState([]);
     const [posicaoSelecionada, setPosicaoSelecionada] = useState("");
     const [equipeSelecionada, setEquipeSelecionada] = useState("");
     const [nomeAtleta, setNomeAtleta] = useState("");
@@ -36,6 +38,44 @@ export default () => {
         };
 
         atletas();
+    }, []);
+
+    //CHAMANDO API PARA PEGAR AS EQUIPES
+    useEffect(() => {
+        const token = window.localStorage.getItem("token");
+        const equipes = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/findEquipes", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setEquipes(response.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
+        equipes();
+    }, []);
+
+    //CHAMANDO API PARA PEGAR AS POSIÇÕES DO ATLETA
+    useEffect(() => {
+        const token = window.localStorage.getItem("token");
+        const posicoes = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/findManyPosicoesAtleta", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setPosicoes(response.data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
+        posicoes();
     }, []);
 
     useEffect(() => {
@@ -101,7 +141,7 @@ export default () => {
         //CHAMANDO API PARA CRIAÇÃO DA EQUIPE
         try {
             const response = await axios.post(
-                "http://localhost:3000/cadastrarEquipe",
+                "http://localhost:3000/cadastrarAtleta",
                 {
                     idPosicao: posicaoSelecionadaNum,
                     idEquipe: equipeSelecionadaNum,
@@ -185,28 +225,57 @@ export default () => {
                             "block w-[60px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
                         }
                     />
-                    {/* <div>
+                </div>
+                <div className="flex gap-10 items-center">
+                    <div>
                         <label
-                            htmlFor="evento"
-                            className="absolute top-[174px] left-[706px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
-                            Evento
+                            htmlFor="equipe"
+                            className="absolute top-[250px] left-[264px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
+                            Equipe
                         </label>
                         <select
                             name="eventoSelecionado"
                             id="eventoSelecionado"
-                            value={eventoSelecionado}
+                            value={equipeSelecionada}
                             onChange={(e) => {
-                                setEventoSelecionado(e.target.value);
+                                setEquipeSelecionada(e.target.value);
                             }}
                             className="w-[400px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] focus:rounded sm:text-sm sm:leading-6 font-montserrat h-[36px]">
                             <option value="" className="font-montserrat">
-                                Selecione o evento
+                                Selecione a Equipe
                             </option>
-                            {evento.length !== 0 &&
-                                evento?.map((ev) => {
+                            {equipes.length !== 0 &&
+                                equipes?.map((eq) => {
                                     return (
-                                        <option key={ev.id} value={ev.id} className="font-montserrat">
-                                            {ev.nomeEvento}
+                                        <option key={eq.id} value={eq.id} className="font-montserrat">
+                                            {eq.nomeEquipe}
+                                        </option>
+                                    );
+                                })}
+                        </select>
+                    </div>
+                    <div>
+                        <label
+                            htmlFor="posicao"
+                            className="absolute top-[250px] left-[704px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
+                            Posição
+                        </label>
+                        <select
+                            name="posicaoSelecionada"
+                            id="posicaoSelecionada"
+                            value={posicaoSelecionada}
+                            onChange={(e) => {
+                                setPosicaoSelecionada(e.target.value);
+                            }}
+                            className="w-[400px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] focus:rounded sm:text-sm sm:leading-6 font-montserrat h-[36px]">
+                            <option value="" className="font-montserrat">
+                                Selecione a posição do atleta
+                            </option>
+                            {posicoes.length !== 0 &&
+                                posicoes?.map((p) => {
+                                    return (
+                                        <option key={p.id} value={p.id} className="font-montserrat">
+                                            {p.nomePosicao}
                                         </option>
                                     );
                                 })}
@@ -214,106 +283,65 @@ export default () => {
                     </div>
                 </div>
                 <div className="flex gap-10 items-center">
+                    <div>
+                        <label
+                            htmlFor="cpf"
+                            className="absolute top-[328px] left-[266px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
+                            CPF
+                        </label>
+                        <InputMask
+                            mask="999.999.999-99"
+                            placeholder="xxx.xxx.xxx-xx"
+                            value={cpf}
+                            onChange={(e) => {
+                                setCpf(e.target.value);
+                            }}
+                            className="block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+                        />
+                    </div>
                     <Inputs
-                        id={nomePresidente}
-                        label={"Presidente"}
-                        value={nomePresidente}
-                        setValue={setNomePresidente}
-                        placeholder={"Nome Presidente"}
+                        id={rg}
+                        label={"RG"}
+                        value={rg}
+                        setValue={setRg}
+                        placeholder={"RG"}
                         type={"text"}
                         cssInput={
                             "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
                         }
                     />
-                    <Inputs
-                        id={nomeTreinador}
-                        label={"Treinador"}
-                        value={nomeTreinador}
-                        setValue={setNomeTreinador}
-                        placeholder={"Nome Treinador"}
-                        type={"text"}
-                        cssInput={
-                            "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
-                        }
-                    />
-                    <Inputs
-                        id={nomeSede}
-                        label={"Sede"}
-                        value={nomeSede}
-                        setValue={setNomeSede}
-                        placeholder={"Nome Sede Equipe"}
-                        type={"text"}
-                        cssInput={
-                            "block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
-                        }
-                    />
-                </div>
-                <div className="flex gap-10 items-center">
                     <div>
                         <label
                             htmlFor="contato"
-                            className="absolute top-[324px] left-[266px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
+                            className="absolute top-[328px] left-[850px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
                             Contato
                         </label>
                         <InputMask
                             mask="(99) 99999-9999"
-                            placeholder="(xx) xxxxx-xxxx"
+                            placeholder="(99) 99999-9999"
                             value={contato}
                             onChange={(e) => {
                                 setContato(e.target.value);
                             }}
-                            className="block w-[180px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
+                            className="block w-[252px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
                         />
                     </div>
-                    <Inputs
-                        id={quantidadeAtletas}
-                        label={"Quantidade Atletas"}
-                        value={quantidadeAtletas}
-                        setValue={setQuantidadeAtletas}
-                        placeholder={"Quantidade Atletas"}
-                        type={"number"}
-                        cssInput={
-                            "block w-[180px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
-                        }
-                    />
-                    <Inputs
-                        id={quantidadeTitulos}
-                        label={"Quantidade Títulos"}
-                        value={quantidadeTitulos}
-                        setValue={setQuantidadeTitulos}
-                        placeholder={"Quantidade Títulos"}
-                        type={"number"}
-                        cssInput={
-                            "block w-[180px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
-                        }
-                    />
-                    <Inputs
-                        id={dataFundacao}
-                        label={"Data Fundação"}
-                        value={dataFundacao}
-                        setValue={setDataFundacao}
-                        placeholder={"Data Fundação"}
-                        type={"date"}
-                        cssInput={
-                            "block w-[176px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
-                        }
-                    />
                 </div>
                 <div>
                     <div>
                         <label
-                            htmlFor="ObservacaoEquipe"
+                            htmlFor="observacaoJogador"
                             className="absolute top-[404px] left-[266px] inline-block bg-white px-1 text-xs  text-[#26AB3B] font-bold font-montserrat">
-                            Observação Equipe
+                            Observação Jogador
                         </label>
                         <textarea
-                            name="observacaoEquipe"
-                            id={observacaoEquipe}
+                            name="observacaoJogador"
+                            id={observacaoJogador}
                             rows={4}
                             className="block w-[836px] rounded border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#242424] placeholder:text-gray-400 placeholder: pl-4 focus:ring-2 focus:ring-inset focus:ring-[#26AB3B] sm:text-sm sm:leading-6 font-montserrat"
-                            value={observacaoEquipe}
+                            value={observacaoJogador}
                             onChange={(e) => {
-                                setObservacaoEquipe(e.target.value);
+                                setObservacaoJogador(e.target.value);
                             }}
                             placeholder="Inserir Observação"
                         />
@@ -322,12 +350,12 @@ export default () => {
                 <div className="flex justify-end gap-4">
                     <a
                         className="bg-[#76787a] text-white font-montserrat font-bold rounded h-8 hover:bg-gray-900 w-[150px] flex flex-col items-center justify-center"
-                        href="/home/searchEquipe">
+                        href="/home/searchAtleta">
                         Voltar
                     </a>
                     <button className="bg-[#26AB3B] text-white font-montserrat font-bold rounded h-8 hover:bg-green-600 w-[150px]">
                         Salvar
-                    </button> */}
+                    </button>
                 </div>
             </form>
         </div>
