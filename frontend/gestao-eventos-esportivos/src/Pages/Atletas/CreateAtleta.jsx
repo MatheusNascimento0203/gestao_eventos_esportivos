@@ -94,9 +94,6 @@ export default () => {
         const idadeNum = Number(idade);
         const posicaoSelecionadaNum = Number(posicaoSelecionada);
         const equipeSelecionadaNum = Number(equipeSelecionada);
-        const dataAtual = new Date();
-        dataAtual.setHours(0, 0, 0, 0);
-        const dataFormatada = dataAtual.toISOString().split("T")[0];
 
         //VALIDANDO PREENCHIMENTO DOS CAMPOS.
         if (
